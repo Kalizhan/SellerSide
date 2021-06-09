@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ProfileActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:gravity="center"
+                    android:text="Профиль"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="10dp">
+
+                    <Button
+                        android:id="@+id/btnNameChanger"
+                        android:layout_width="match_parent"
+                        android:layout_weight="2"
+                        android:layout_height="70dp"
+                        android:background="@color/white"
+                        android:text="Атын өзгерту"
+                        android:textAlignment="textStart" />
+
+                    <TextView
+                        android:id="@+id/tvProfileName"
+                        android:hint="Name"
+                        android:layout_weight="1"
+                        android:gravity="right|center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="10dp">
+
+                    <Button
+                        android:id="@+id/btnPhoneChanger"
+                        android:layout_width="match_parent"
+                        android:layout_weight="2"
+                        android:layout_height="70dp"
+                        android:background="@color/white"
+                        android:text="Телефон"
+                        android:textAlignment="textStart" />
+
+                    <TextView
+                        android:id="@+id/tvProfilePhone"
+                        android:hint="Phone"
+                        android:layout_weight="1"
+                        android:gravity="right|center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="10dp">
+
+                    <Button
+                        android:id="@+id/btnEmailChanger"
+                        android:layout_width="match_parent"
+                        android:layout_weight="2"
+                        android:layout_height="70dp"
+                        android:background="@color/white"
+                        android:text="E-mail"
+                        android:textAlignment="textStart" />
+
+                    <TextView
+                        android:id="@+id/tvProfileEmail"
+                        android:hint="email"
+                        android:layout_weight="1"
+                        android:gravity="right|center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</LinearLayout>

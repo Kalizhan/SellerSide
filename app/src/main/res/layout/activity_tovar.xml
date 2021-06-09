@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="16dp"
+    tools:context=".TovarActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerviewTovar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerviewTovar"
+        android:layout_marginTop="20dp"
+        android:paddingHorizontal="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Тауар аты:"
+                android:textSize="24dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/tovarNameTovar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Тауар аты:"
+                android:textSize="24dp"
+                android:paddingStart="10dp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:paddingHorizontal="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Тауар коды:"
+                android:textSize="24dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/tovarCodeTovar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Тауар коды:"
+                android:textSize="24dp"
+                android:paddingStart="10dp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:paddingHorizontal="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Тауар бағасы:"
+                android:textSize="24dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/tovarPriceTovar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:text="Тауар бағасы:"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:paddingHorizontal="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Тауар саны:"
+                android:textSize="24dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/tovarQuantityTovar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Тауар саны:"
+                android:textSize="24dp"
+                android:paddingStart="10dp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/videoObzorTovar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Видеообзор қарау"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:textColor="@color/zerdeLight"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

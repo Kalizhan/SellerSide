@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Zerde App(Satushy)</string>
+
+    <string name="title1">Басты бет</string>
+    <string name="title2">Тапсырыстар</string>
+    <string name="title3">Себет</string>
+    <string name="title4">Баптаулар</string>
+    <string name="title5">Отчет</string>
+
+    <string name="pass"><u>Пароль есімде емес</u></string>
+
+    <string name="enter"><u>Кіру</u></string>
+    <string name="register"><u>Тіркелу</u></string>
+</resources>
