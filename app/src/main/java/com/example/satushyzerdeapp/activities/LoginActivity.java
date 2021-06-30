@@ -21,6 +21,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users").child("Satushylar");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Satushylar");
 
         emailOrPhone = findViewById(R.id.etPhoneOrEmailLogin);
         password = findViewById(R.id.etPasswordLogin);
@@ -82,7 +84,9 @@ public class LoginActivity extends AppCompatActivity {
                                         startActivity(intent);
                                     }else{
                                         progressDialog.cancel();
-                                        Toast.makeText(getApplicationContext(), "Қолданушы табылмады", Toast.LENGTH_SHORT).show();
+                                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException){
+                                            Toast.makeText(getApplicationContext(), "Пароль қате", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 }
                             });

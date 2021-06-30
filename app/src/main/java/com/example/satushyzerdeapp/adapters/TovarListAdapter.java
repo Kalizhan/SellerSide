@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -89,7 +90,7 @@ public class TovarListAdapter extends RecyclerView.Adapter<TovarListAdapter.view
 
     public class viewHolder extends RecyclerView.ViewHolder {
         ImageView photo;
-        TextView name, price, code, quantity;
+        TextView name, price, code, quantity, availability;
         public viewHolder(@NonNull View itemView) {
             super(itemView);
             photo = itemView.findViewById(R.id.imgGood);
@@ -97,6 +98,7 @@ public class TovarListAdapter extends RecyclerView.Adapter<TovarListAdapter.view
             price = itemView.findViewById(R.id.priceNum);
             code = itemView.findViewById(R.id.idNum);
             quantity = itemView.findViewById(R.id.quantity);
+            availability = itemView.findViewById(R.id.inProcess);
         }
     }
 
@@ -119,9 +121,23 @@ public class TovarListAdapter extends RecyclerView.Adapter<TovarListAdapter.view
                 .into(holder.photo);
 
         holder.name.setText(tovar.getName());
-        holder.price.setText(String.valueOf(tovar.getPrice()) + " тг/шт");
-        holder.code.setText(tovar.getCode());
-        holder.quantity.setText(""+tovar.getQuantity());
+        holder.price.setText(String.valueOf(tovar.getPrice()) + " тг/дана");
+        holder.code.setText("#"+tovar.getCode());
+        holder.quantity.setText(tovar.getQuantity()+" дана");
+
+        if (tovar.getQuantity()==0){
+            holder.availability.setVisibility(View.VISIBLE);
+        }else{
+            holder.availability.setVisibility(View.INVISIBLE);
+        }
+
+//        if (Integer.parseInt(String.valueOf(holder.quantity.getText())) <= 10 && Integer.parseInt(String.valueOf(holder.quantity.getText())) > 0){
+//            holder.cardView.setBackgroundColor(context.getResources().getColor(R.color.yellow));
+//        }else if (Integer.parseInt(String.valueOf(holder.quantity.getText())) == 0){
+//            holder.cardView.setBackgroundColor(context.getResources().getColor(R.color.red));
+//        }else{
+//            holder.cardView.setBackgroundColor(context.getResources().getColor(R.color.transparent));
+//        }
 
         holder.name.setOnClickListener(new View.OnClickListener() {
             @Override

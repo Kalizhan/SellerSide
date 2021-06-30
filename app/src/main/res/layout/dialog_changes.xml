@@ -15,22 +15,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="Жаңа тауар енгізу"
+            android:text="Өзгерістер енгізу"
             android:textColor="@color/zerde"
             android:textSize="24dp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:paddingHorizontal="35dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -39,18 +28,23 @@
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="16dp"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerview1"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
             tools:layout_editor_absoluteX="30dp">
 
-            <EditText
-                android:id="@+id/etTovarName"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Тауар аты"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textSize="16dp" />
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_button_grey"
+                android:hint="Аты-Жөні"
+                android:padding="5dp">
+
+                <EditText
+                    android:id="@+id/userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorAccent" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <EditText
                 android:id="@+id/etTovarCode"
@@ -75,18 +69,9 @@
                 android:id="@+id/etTovarPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:hint="Тауар бағасы"
                 android:maxLines="1"
                 android:inputType="number"
-                android:textSize="16dp" />
-
-            <EditText
-                android:id="@+id/etDopInfo"
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
-                android:hint="Тауар туралы қосымша мәлімет"
-                android:inputType="text"
                 android:textSize="16dp" />
         </LinearLayout>
 

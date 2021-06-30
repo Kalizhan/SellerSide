@@ -11,4 +11,21 @@
 
     <string name="enter"><u>Кіру</u></string>
     <string name="register"><u>Тіркелу</u></string>
+
+
+
+    <string-array name="str">
+
+        <item>Jan</item>
+        <item>Jan</item>
+        <item>Jan</item>
+        <item>Jan</item>
+        <item>Jan</item>
+        <item>Jan</item>
+        <item>Jan</item>
+        <item>Jan</item>
+        <item>Jan</item>
+        <item>Jan</item>
+
+    </string-array>
 </resources>

@@ -16,4 +16,12 @@
     <color name="zerdeLight">#6498E6</color>
     <color name="yellow">#E6B664</color>
     <color name="transparent">#00000000</color>
+
+    <color name="yesil">#0A8032</color>
+    <color name="sari">#E3E400</color>
+    <color name="kyzyl">#FF0303</color>
+
+    <color name="neworder">#C1EDFF</color>
+    <color name="accept">#57C9FA</color>
+    <color name="finished">#327A99</color>
 </resources>

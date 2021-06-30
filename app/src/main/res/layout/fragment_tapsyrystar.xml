@@ -37,6 +37,14 @@
                     android:textSize="16sp" />
 
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/filterImgViewTapsyrys"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/group"
+                android:visibility="visible"/>
         </RelativeLayout>
 
         <RelativeLayout

@@ -4,20 +4,22 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 public class Tovar implements Serializable {
-    String name, code, photo;
+    String name, code, photo, date, dopInfo;
     int quantity, satyldyShtuk;
     Long price;
 
 
     public Tovar(){}
 
-    public Tovar(String name, String code,  String photo, Long price, int quantity, int satyldyShtuk) {
+    public Tovar(String name, String code, String photo, Long price, int quantity, int satyldyShtuk, String date, String dopInfo) {
         this.name = name;
         this.code = code;
         this.price = price;
         this.photo = photo;
         this.quantity = quantity;
         this.satyldyShtuk = satyldyShtuk;
+        this.date = date;
+        this.dopInfo = dopInfo;
     }
 
     public static Comparator<Tovar> tovarNameComparator = new Comparator<Tovar>() {
@@ -28,6 +30,20 @@ public class Tovar implements Serializable {
 
             //ascending order
             return bookName1.compareTo(bookName2);
+
+            //descending order
+            //return StudentName2.compareTo(StudentName1);
+        }
+    };
+
+    public static Comparator<Tovar> tovarDateComparator = new Comparator<Tovar>() {
+
+        public int compare(Tovar s1, Tovar s2) {
+            String date1 = s1.getDate();
+            String date2 = s2.getDate();
+
+            //ascending order
+            return date2.compareTo(date1);
 
             //descending order
             //return StudentName2.compareTo(StudentName1);
@@ -127,5 +143,21 @@ public class Tovar implements Serializable {
 
     public void setSatyldyShtuk(int satyldyShtuk) {
         this.satyldyShtuk = satyldyShtuk;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDopInfo() {
+        return dopInfo;
+    }
+
+    public void setDopInfo(String dopInfo) {
+        this.dopInfo = dopInfo;
     }
 }

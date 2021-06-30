@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -53,6 +55,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Профиль");
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         mCheckInternetStatus = new CheckInternetStatus(ProfileActivity.this);
         is_internet_connected = mCheckInternetStatus.isInternetConnected();
@@ -109,6 +116,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onDestroy() {
@@ -131,7 +147,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         dialog = new Dialog(this);
 
         mAuth = FirebaseAuth.getInstance();
-        mdatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("Satushylar");
+        mdatabaseReference = FirebaseDatabase.getInstance().getReference("Satushylar");
         //mStorageRef = FirebaseStorage.getInstance().getReference();
 
         viewData();

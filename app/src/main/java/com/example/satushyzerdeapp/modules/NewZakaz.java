@@ -3,12 +3,13 @@ package com.example.satushyzerdeapp.modules;
 import java.io.Serializable;
 
 public class NewZakaz implements Serializable {
-    String fullName, address, date, tovarCode, tovarSituation, tovarQuantity, phoneNum, email, comment, tovarName;
+    String fullName, address, date, tovarCode, tovarSituation, tovarQuantity, phoneNum, email, comment, tovarName, tovarKey, checkDelivery, payment, paymentStyle;
     Long tovarPrice;
 
     public NewZakaz(){}
 
-    public NewZakaz(String fullName, String phoneNum, String email, String address, String date, String tovarCode, String tovarSituation, Long tovarPrice, String tovarQuantity, String comment, String tovarName) {
+    public NewZakaz(String fullName, String phoneNum, String email, String address, String date, String tovarCode, String tovarSituation, Long tovarPrice, String tovarQuantity, String comment, String tovarName, String tovarKey,
+                    String checkDelivery, String payment, String paymentStyle) {
         this.fullName = fullName;
         this.phoneNum = phoneNum;
         this.email = email;
@@ -20,6 +21,10 @@ public class NewZakaz implements Serializable {
         this.tovarQuantity = tovarQuantity;
         this.comment = comment;
         this.tovarName = tovarName;
+        this.tovarKey = tovarKey;
+        this.checkDelivery = checkDelivery;
+        this.payment = payment;
+        this.paymentStyle = paymentStyle;
     }
 
     public String getEmail() {
@@ -108,5 +113,37 @@ public class NewZakaz implements Serializable {
 
     public void setTovarName(String tovarName) {
         this.tovarName = tovarName;
+    }
+
+    public String getTovarKey() {
+        return tovarKey;
+    }
+
+    public void setTovarKey(String tovarKey) {
+        this.tovarKey = tovarKey;
+    }
+
+    public String getCheckDelivery() {
+        return checkDelivery;
+    }
+
+    public void setCheckDelivery(String checkDelivery) {
+        this.checkDelivery = checkDelivery;
+    }
+
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
+
+    public String getPaymentStyle() {
+        return paymentStyle;
+    }
+
+    public void setPaymentStyle(String paymentStyle) {
+        this.paymentStyle = paymentStyle;
     }
 }

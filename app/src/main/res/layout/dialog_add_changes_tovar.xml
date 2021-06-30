@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="20dp">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Өзгерістер енгізу"
+        android:textAlignment="center"
+        android:textColor="@color/zerde"
+        android:textSize="24dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:layout_editor_absoluteX="30dp">
+
+        <EditText
+            android:id="@+id/etTovarNam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Тауар аты"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/etTovarCod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Тауар коды"
+            android:maxLines="1"
+            android:textSize="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/etTovarQuantit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="100 dana"
+                android:gravity="center"
+                android:textSize="16dp"/>
+
+            <EditText
+                android:id="@+id/etAddMinusTovar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Тауардың санын енгізіңіз"
+                android:inputType="number"
+                android:maxLines="1"
+                android:layout_weight="1"
+                android:textSize="16dp"
+                android:textAlignment="center"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/chechAddMinus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumb="@drawable/thumb"
+                app:track="@drawable/track"
+                app:showText="true"
+                android:textOn="+"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:textOff="-"/>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/etTovarPric"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Тауар бағасы"
+            android:inputType="number"
+            android:maxLines="1"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/etDopInf"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:hint="Тауар туралы қосымша мәлімет"
+            android:inputType="text"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnChange"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/custom_button"
+        android:text="Өзгерту"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

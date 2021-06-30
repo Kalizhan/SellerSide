@@ -1,17 +1,16 @@
 package com.example.satushyzerdeapp.ui.bastybet;
 
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,11 +21,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.satushyzerdeapp.MainActivity;
 import com.example.satushyzerdeapp.R;
 import com.example.satushyzerdeapp.activities.LoginActivity;
 import com.example.satushyzerdeapp.activities.ProfileActivity;
@@ -41,14 +47,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimeZone;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -70,14 +85,15 @@ public class BastyBetFragment extends Fragment implements View.OnClickListener {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imgUri;
-    CardView cardView;
-    ImageView imgTovar;
-    EditText etTovarName, etTovarPrice, etTovarQuantity, etTovarCode;
+    EditText etTovarName, etTovarPrice, etTovarQuantity, etTovarCode, etDopInfo;
     PopupMenu popupMenu;
 
     ArrayList<Uri> uri;
     RecyclerView recyclerView1;
     HorizontalRecyclerViewAdapter horizontalRecyclerViewAdapter;
+
+    private RequestQueue mRequestQue;
+    private String URL = "https://fcm.googleapis.com/fcm/send";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,24 +108,52 @@ public class BastyBetFragment extends Fragment implements View.OnClickListener {
         recyclerView = view.findViewById(R.id.recyclerBastyBet);
         tovarArrayList = new ArrayList<>();
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("TovarInfo");
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mstorageReference = FirebaseStorage.getInstance().getReference("TovarImages");
 
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle("Мәліметтер оқылуда...");
         progressDialog.setMessage("Күте тұрыңыз");
+        progressDialog.setCancelable(false);
 
         getData();
-        initFilter();
 
         tovarListAdapter = new TovarListAdapter(tovarArrayList, getContext());
         recyclerView.setAdapter(tovarListAdapter);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
+
+        new CountDownTimer(5000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (tovarArrayList.isEmpty()) {
+                    Toast.makeText(getContext(), "Байланысты тексеріңіз", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.start();
+
+
         imgAccountBtn.setOnClickListener(this);
         imgFilterView.setOnClickListener(this);
         btnAddTovar.setOnClickListener(this);
+
+//        if (getIntent().hasExtra("category")){
+//            Intent intent = new Intent(MainActivity.this,ReceiveNotificationActivity.class);
+//            intent.putExtra("category",getIntent().getStringExtra("category"));
+//            intent.putExtra("brandId",getIntent().getStringExtra("brandId"));
+//            startActivity(intent);
+//        }
+
+        mRequestQue = Volley.newRequestQueue(getContext());
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+
         return view;
     }
 
@@ -147,7 +191,7 @@ public class BastyBetFragment extends Fragment implements View.OnClickListener {
     private void getData() {
         progressDialog.show();
 
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("TovarInfo").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -160,7 +204,7 @@ public class BastyBetFragment extends Fragment implements View.OnClickListener {
 
                     tovarListAdapter.notifyDataSetChanged();
                     searchData();
-                }else {
+                } else {
                     Toast.makeText(getActivity(), "Тауар енгізіңіз!", Toast.LENGTH_SHORT).show();
                     progressDialog.cancel();
                 }
@@ -172,9 +216,7 @@ public class BastyBetFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-    public void initFilter(){
 
-    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -205,7 +247,8 @@ public class BastyBetFragment extends Fragment implements View.OnClickListener {
                                 tovarListAdapter.notifyDataSetChanged();
                                 break;
                             case R.id.new_sort:
-                                Toast.makeText(getContext(), "New Sort", Toast.LENGTH_SHORT).show();
+                                Collections.sort(tovarArrayList, Tovar.tovarDateComparator);
+                                tovarListAdapter.notifyDataSetChanged();
                                 break;
                             case R.id.sale_sort:
                                 Collections.sort(tovarArrayList, Tovar.tovarSatylym);
@@ -239,23 +282,9 @@ public class BastyBetFragment extends Fragment implements View.OnClickListener {
                 etTovarPrice = dialogView.findViewById(R.id.etTovarPrice);
                 etTovarQuantity = dialogView.findViewById(R.id.etTovarQuantity);
                 etTovarCode = dialogView.findViewById(R.id.etTovarCode);
+                etDopInfo = dialogView.findViewById(R.id.etDopInfo);
 
                 btnAddNewTovar = dialogView.findViewById(R.id.btnAddNewTovar);
-
-//                imgTovar.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Log.i("image", "123 ");
-////                        openFileChooser();
-//                    }
-//                });
-//                cardView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Log.i("image", "456 ");
-////                        openFileChooser();
-//                    }
-//                });
 
                 btnAddNewTovar.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -288,18 +317,10 @@ public class BastyBetFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private String getFileExtension(Uri uri) {
-        ContentResolver cR = getContext().getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
-
     ProgressDialog progressDialog1;
     ArrayList<String> urlStrings;
 
     private void uploadFile2() {
-//        Log.i("images_uri", "uri.size() " + uri.size());
-
         progressDialog1 = new ProgressDialog(getContext());
         progressDialog1.setTitle("Енгізілуде...");
         progressDialog1.show();
@@ -350,27 +371,85 @@ public class BastyBetFragment extends Fragment implements View.OnClickListener {
     }
 
     public void addData() {
-        //Log.i("images_uri", "add Data");
         String imageUris = "";
 
         for (int i = 0; i < urlStrings.size(); i++) {
             imageUris = imageUris + urlStrings.get(i) + ",";
         }
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy/HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+6"));
+        Date today = Calendar.getInstance().getTime();
 
         Tovar tovar = new Tovar(
                 etTovarName.getText().toString(),
                 etTovarCode.getText().toString(),
                 imageUris,
                 Long.parseLong(etTovarPrice.getText().toString()),
-                Integer.parseInt(etTovarQuantity.getText().toString()), 0);
+                Integer.parseInt(etTovarQuantity.getText().toString()), 0, dateFormat.format(today), etDopInfo.getText().toString());
 
         String tovarCode = etTovarCode.getText().toString();
 
-        mDatabaseReference.child(tovarCode).setValue(tovar);
+        mDatabaseReference.child("TovarInfo").child(tovarCode).setValue(tovar);
         Toast.makeText(getContext(), " Тауар енгізілді!", Toast.LENGTH_SHORT).show();
+
+        sendNotification();
+
         progressDialog1.dismiss();
     }
+
+
+    private void sendNotification() {
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("to","/topics/"+"news");
+            JSONObject notificationObj = new JSONObject();
+            notificationObj.put("title","any title");
+            notificationObj.put("body","any body");
+
+            JSONObject extraData = new JSONObject();
+            extraData.put("brandId","puma");
+            extraData.put("category","Shoes");
+
+
+
+            json.put("notification",notificationObj);
+            json.put("data",extraData);
+
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL,
+                    json,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            Log.d("MUR", "onResponse: ");
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("MUR", "onError: "+error.networkResponse);
+                }
+            }
+            ){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> header = new HashMap<>();
+                    header.put("content-type","application/json");
+                    header.put("authorization","key=AAAAiv-r5WE:APA91bHDKuUYJeTnasDKVB1_HHlLhSarfX9e6hSnzpunnLu9lNmYCIxF4EebNAN2g3ea4X7dFLM5nDj9-r07BYlxURXrOXv-1gK94UzTNcKC_j5nIjdtuc904pwucc76kkkdTWvu6_ZW");
+                    return header;
+                }
+            };
+            mRequestQue.add(request);
+        }
+        catch (JSONException e)
+
+        {
+            e.printStackTrace();
+        }
+    }
+
 
     private void openFileChooser() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);

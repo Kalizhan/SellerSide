@@ -1,6 +1,7 @@
 package com.example.satushyzerdeapp.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 public class ZakazListAdapter extends RecyclerView.Adapter<ZakazListAdapter.viewHolder> {
     Context context;
     ArrayList<NewZakaz> newZakazList;
-    String[] codes, quantities, tovarName;
+    int i = 0;
 
     public ZakazListAdapter(Context context, ArrayList<NewZakaz> newZakazList) {
         this.context = context;
@@ -45,72 +46,34 @@ public class ZakazListAdapter extends RecyclerView.Adapter<ZakazListAdapter.view
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         int pos = position + 1;
         NewZakaz newZakaz = newZakazList.get(position);
 
         holder.zakazOrder.setText("Тапсырыс " + pos);
         holder.enteredDate.setText(newZakaz.getDate());
-        holder.zakazFullName.setText(newZakaz.getFullName());
-        holder.zakazEmail.setText(newZakaz.getEmail());
-        holder.zakazPhone.setText(newZakaz.getPhoneNum());
-        holder.address.setText(newZakaz.getAddress());
-        holder.zakazPrice.setText("" + newZakaz.getTovarPrice() + " тг");
-        //Log.i("situation", newZakaz.getTovarSituation());
+        holder.zakazSituation.setText(newZakaz.getPaymentStyle());
+
+        if (newZakaz.getPaymentStyle().equals("Толықтай төлеу")) {
+            holder.zakazSituation.setTextColor(context.getResources().getColor(R.color.yesil));
+            holder.zakazAkshaTolenuKerek.setText(newZakaz.getTovarPrice() + " тг");
+            holder.zakazAkshaKaldy.setText("0 тг");
+        } else if (newZakaz.getPaymentStyle().equals("Жартылай төлеу")) {
+            holder.zakazSituation.setTextColor(context.getResources().getColor(R.color.sari));
+            holder.zakazAkshaTolenuKerek.setText((int) (newZakaz.getTovarPrice() / 2) + " тг");
+            holder.zakazAkshaKaldy.setText((int) (newZakaz.getTovarPrice() / 2) + " тг");
+        } else if (newZakaz.getPaymentStyle().equals("Тауарды алған соң төлеу")) {
+            holder.zakazSituation.setTextColor(context.getResources().getColor(R.color.kyzyl));
+            holder.zakazAkshaTolenuKerek.setText("0 тг");
+            holder.zakazAkshaKaldy.setText(newZakaz.getTovarPrice() + " тг");
+        }
+
         if (newZakaz.getTovarSituation().equals("new order")) {
-            //holder.zakazSituation.setText("Тапсырыс қабылдануда...");
-            holder.zakazOrder.setTextColor(context.getResources().getColor(R.color.colorAccent));
-            holder.zakazViewColor.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+            holder.zakazViewColor.setBackgroundColor(context.getResources().getColor(R.color.neworder));
         } else if (newZakaz.getTovarSituation().equals("order accepted")) {
-            //holder.zakazSituation.setText("Тапсырыс қабылданды. Күтіңіз!");
-            holder.zakazOrder.setTextColor(context.getResources().getColor(R.color.yellow));
-            holder.zakazViewColor.setBackgroundColor(context.getResources().getColor(R.color.yellow));
-            //holder.zakazSituation.setTextColor(context.getResources().getColor(R.color.yellow));
-//            Glide
-//                    .with(context)
-//                    .load(R.drawable.waiting)
-//                    .centerCrop()
-//                    .placeholder(R.drawable.timer)
-//                    .into(holder.zakazSitImage);
-        } else {
-            //holder.zakazSituation.setText("Тапсырыс аяқталды!");
-            holder.zakazOrder.setTextColor(context.getResources().getColor(R.color.green));
-            holder.zakazViewColor.setBackgroundColor(context.getResources().getColor(R.color.green));
-            //holder.zakazSituation.setTextColor(context.getResources().getColor(R.color.green));
-//            Glide
-//                    .with(context)
-//                    .load(R.drawable.checked)
-//                    .centerCrop()
-//                    .placeholder(R.drawable.timer)
-//                    .into(holder.zakazSitImage);
+            holder.zakazViewColor.setBackgroundColor(context.getResources().getColor(R.color.accept));
+        } else if (newZakaz.getTovarSituation().equals("order got")) {
+            holder.zakazViewColor.setBackgroundColor(context.getResources().getColor(R.color.finished));
         }
-        codes = newZakaz.getTovarCode().split(",");
-        quantities = newZakaz.getTovarQuantity().split(",");
-        tovarName = newZakaz.getTovarName().split(",");
-
-//        for (i = 0; i < codes.length; i++) {
-//            mDatabase.child(codes[i]).addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    if (snapshot.exists()) {
-//                        Tovar tovar = snapshot.getValue(Tovar.class);
-//                        basicInfo = basicInfo + tovar.getName() + " - " + quantities[i-1] + ", ";
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//
-//                }
-//            });
-//        }
-        String basicInfo = "";
-        for (int i = 0; i < tovarName.length; i++) {
-            basicInfo = basicInfo + tovarName[i] + " - " + quantities[i] + " штук, ";
-        }
-
-        holder.tovarAttary.setText("Тапсырыс: " + basicInfo);
-        holder.tovarCode.setText("Тауар кодтары: " + newZakaz.getTovarCode());
 
         if (!newZakaz.getComment().isEmpty()) {
             holder.comment.setVisibility(View.VISIBLE);
@@ -118,45 +81,113 @@ public class ZakazListAdapter extends RecyclerView.Adapter<ZakazListAdapter.view
         } else {
             holder.comment.setVisibility(View.GONE);
         }
+//
+//        String user = holder.zakazEmail.getText().toString().replace(".", "-");
+//        Log.i("user", "Email: " + user);
 
-        String user = holder.zakazEmail.getText().toString().replace(".", "-");
-        Log.i("user", "Email: " + user);
 
-        holder.btnAcceptZakaz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i=0; i<codes.length; i++){
-                    mDatabase.child("TovarInfo").child(codes[i]).orderByChild("satyldyShtuk").equalTo(quantities[i]);
-                    Toast.makeText(context, "Өзгертілді!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        holder.btnAcceptZakaz.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Log.i("codes", codes.length + "/" + quantities.length);
+////                    Log.i("quantites1", String.valueOf(quantities[i]));
+//                mDatabase.child("TovarInfo").addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        if (snapshot.exists()) {
+//                            if (codes.length == quantities.length) {
+//                                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+//                                    for (i = 0; i < codes.length; i++) {
+//                                        Tovar tovar = snapshot1.getValue(Tovar.class);
+//                                        if (codes[i].equals(tovar.getCode())) {
+//                                            int quant = tovar.getSatyldyShtuk();
+////                                            Log.i("quantites", String.valueOf(quant));
+//                                            quant = quant + Integer.parseInt(quantities[i]);
+//                                            int q1 = tovar.getQuantity() - Integer.parseInt(quantities[i]);
+//                                            mDatabase.child("TovarInfo").child(codes[i]).child("satyldyShtuk").setValue(quant);
+//                                            mDatabase.child("TovarInfo").child(codes[i]).child("quantity").setValue(q1);
+//
+//                                        }
+//
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
+//                mDatabase.child("Zakazdar").child(user).addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        for (DataSnapshot snap : snapshot.getChildren()) {
+//
+//                            String tovarSituat = "order accepted";
+//                            mDatabase.child("Zakazdar").child(user).child("" + holder.tovarKey.getText()).child("tovarSituation").setValue(tovarSituat);
+//                            Toast.makeText(context, "Өзгертілді!", Toast.LENGTH_SHORT).show();
+//                            notifyItemChanged(position);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
+//            }
+//        });
 
-        holder.btnRemoveZakaz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(context, "btn Otmena " + holder.zakazOrder.getText().toString(), Toast.LENGTH_SHORT).show();
-                mDatabase.child("Zakazdar").child(user).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            for (DataSnapshot snap : snapshot.getChildren()) {
-                                NewZakaz newZakaz2 = snap.getValue(NewZakaz.class);
-                                if (holder.enteredDate.getText().toString().equals(newZakaz2.getDate())) {
-                                    snap.getRef().removeValue();
-                                    Toast.makeText(context, holder.zakazOrder.getText() + " өшірілді!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }
-                    }
+//        holder.btnRemoveZakaz.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Toast.makeText(context, "btn Otmena " + holder.zakazOrder.getText().toString(), Toast.LENGTH_SHORT).show();
+//                mDatabase.child("Zakazdar").child(user).addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        if (snapshot.exists()) {
+//                            for (DataSnapshot snap : snapshot.getChildren()) {
+//                                NewZakaz newZakaz2 = snap.getValue(NewZakaz.class);
+//                                if (holder.enteredDate.getText().toString().equals(newZakaz2.getDate())) {
+//                                    snap.getRef().removeValue();
+//                                    Toast.makeText(context, holder.zakazOrder.getText() + " өшірілді!", Toast.LENGTH_SHORT).show();
+//                                    notifyItemRemoved(position);
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
+//        });
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
+//        holder.btnLastAcceptance.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mDatabase.child("Zakazdar").child(user).addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        for (DataSnapshot snap : snapshot.getChildren()) {
+//                            String tovarSituat = "order got";
+//                            mDatabase.child("Zakazdar").child(user).child("" + holder.tovarKey.getText()).child("tovarSituation").setValue(tovarSituat);
+//                            Toast.makeText(context, "Өзгертілді!", Toast.LENGTH_SHORT).show();
+//                            notifyItemChanged(position);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
+//            }
+//        });
     }
 
     @Override
@@ -165,25 +196,18 @@ public class ZakazListAdapter extends RecyclerView.Adapter<ZakazListAdapter.view
     }
 
     public class viewHolder extends RecyclerView.ViewHolder {
-        TextView zakazOrder, enteredDate, address, zakazPrice, comment, zakazFullName, zakazEmail, zakazPhone, tovarAttary, tovarCode;
+        TextView zakazOrder, enteredDate, zakazSituation, zakazAkshaTolenuKerek, zakazAkshaKaldy, comment;
         View zakazViewColor;
-        Button btnAcceptZakaz, btnRemoveZakaz;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
-            zakazFullName = itemView.findViewById(R.id.tvzakazFullName);
-            zakazEmail = itemView.findViewById(R.id.tvzakazEmail);
-            zakazPhone = itemView.findViewById(R.id.tvzakazPhoneNumber);
-            tovarAttary = itemView.findViewById(R.id.tvTovarAttary);
-            tovarCode = itemView.findViewById(R.id.tvTovarCode);
             zakazOrder = itemView.findViewById(R.id.tvzakaz);
             enteredDate = itemView.findViewById(R.id.tventereddate);
-            address = itemView.findViewById(R.id.tvaddress);
-            zakazPrice = itemView.findViewById(R.id.tvzakazprice);
+            zakazSituation = itemView.findViewById(R.id.tvZakazSituation);
+            zakazAkshaTolenuKerek = itemView.findViewById(R.id.tvZakazPrice);
+            zakazAkshaKaldy = itemView.findViewById(R.id.tvZakazKalganAksha);
             comment = itemView.findViewById(R.id.tvcomment);
             zakazViewColor = itemView.findViewById(R.id.view);
-            btnAcceptZakaz = itemView.findViewById(R.id.btnAccept);
-            btnRemoveZakaz = itemView.findViewById(R.id.btnRemove);
         }
     }
 }

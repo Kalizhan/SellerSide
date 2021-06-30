@@ -1,5 +1,6 @@
 package com.example.satushyzerdeapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -7,6 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -15,9 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.satushyzerdeapp.modules.CheckInternetStatus;
+import com.example.satushyzerdeapp.modules.NewZakaz;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationMenuView mbottomNavigationMenuView;
@@ -25,17 +33,42 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationItemView itemView;
     View cart_badge;
 
+    DatabaseReference databaseReference;
+
     static TextView cart_badgeTv;
     CheckInternetStatus mCheckInternetStatus;
     boolean is_internet_connected = false;
+
+    int i = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        mAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference("Zakazdar");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot snap : snapshot.getChildren()) {
+                        for (DataSnapshot snap1 : snap.getChildren()){
+                            NewZakaz newZakaz = snap1.getValue(NewZakaz.class);
+                            if (newZakaz.getTovarSituation().equals("new order")){
+                                i = i+1;
+                            }
+                            Log.i("cart_badge", "i= "+i);
 
-        //setActionBar(toolbar);
+                            setBagdeCount(i);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
@@ -66,32 +99,7 @@ public class MainActivity extends AppCompatActivity {
         //badgeDefault();
     }
 
-    private void badgeDefault() {
-    }
-
     public static void setBagdeCount(int n) {
         cart_badgeTv.setText("" + n);
     }
-
-    public static void increaseBagdeCount() {
-        int n = Integer.parseInt("" + cart_badgeTv.getText()) + 1;
-        cart_badgeTv.setText("" + n);
-    }
-
-    public static void decreaseBagdeCount() {
-        int n = Integer.parseInt("" + cart_badgeTv.getText()) - 1;
-        cart_badgeTv.setText("" + n);
-    }
-
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if (currentUser != null) {
-//            reload();
-//        }
-//    }
-//
-//    private void reload() {
-//    }
 }
